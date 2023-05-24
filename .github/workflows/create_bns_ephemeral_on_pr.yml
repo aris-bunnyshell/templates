@@ -1,0 +1,22 @@
+name: Update Bunnyshell ephemeral on PR
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - main
+jobs:
+  update:
+    name: Update Bunnyshell
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    - name: List Bunnyshell environments
+      uses: addnab/docker-run-action@v3
+      with:
+        image: bunnyshell/cli:latest
+        options: -e ABC=${{ secrets.BUNNYSHELL_ACCESS_TOKEN }}
+        run: environments list
